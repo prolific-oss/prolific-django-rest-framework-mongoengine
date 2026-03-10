@@ -69,7 +69,7 @@ class ReferencedSerializer(DocumentSerializer):
 
 
 class ListReferencingModel(Document):
-    refs = fields.ListField(ReferenceField(ReferencedDoc))
+    refs = fields.ListField(fields.ReferenceField(ReferencedDoc))
 
 
 class RecursiveReferencingDoc(Document):

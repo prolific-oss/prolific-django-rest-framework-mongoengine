@@ -9,6 +9,7 @@ def pytest_configure():
         SECRET_KEY='not very secret in tests',
         USE_I18N=True,
         USE_L10N=True,
+        USE_TZ=False,
         STATIC_URL='/static/',
         ROOT_URLCONF='tests.urls',
         TEMPLATE_LOADERS=(),

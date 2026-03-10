@@ -17,9 +17,9 @@ The features and differences of this package are described in [API documentation
 
 ## Requirements
 
-* Django == 2.* | 3.0
-* djangorestframework == 3.*
-* mongoengine == 0.18.* | 0.19.*
+* Django == 5.2.*
+* djangorestframework >= 3.16.*
+* mongoengine >= 0.29.*
 * blinker == 1.* (for mongoengine referencefields to work)
 
 ## Installation
