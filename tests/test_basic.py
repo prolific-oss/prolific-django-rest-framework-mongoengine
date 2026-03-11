@@ -115,7 +115,7 @@ class TestRegularFieldMappings(TestCase):
                 long_field = IntegerField(required=False)
                 float_field = FloatField(required=False)
                 boolean_field = BooleanField(required=False)
-                nullboolean_field = NullBooleanField(required=False)
+                nullboolean_field = BooleanField(allow_null=True, required=False)
                 date_field = DateTimeField(required=False)
                 complexdate_field = DateTimeField(required=False)
                 uuid_field = UUIDField(required=False)
@@ -167,7 +167,7 @@ class TestRegularFieldMappings(TestCase):
                 long_field = IntegerField(required=False)
                 float_field = FloatField(required=False)
                 boolean_field = BooleanField(required=False)
-                nullboolean_field = NullBooleanField(required=False)
+                nullboolean_field = BooleanField(allow_null=True, required=False)
                 date_field = DateTimeField(required=False)
                 complexdate_field = DateTimeField(required=False)
                 uuid_field = UUIDField(required=False)
@@ -281,7 +281,7 @@ class TestRegularFieldMappings(TestCase):
 
         with pytest.raises(ImproperlyConfigured) as exc:
             TestSerializer().fields
-        expected = 'Field name `invalid` is not valid for model `RegularModel`.'
+        expected = 'Field name `invalid` is not valid for model `RegularModel`'
         assert expected in str(exc.value)
 
     def test_missing_field(self):
