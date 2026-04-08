@@ -6,7 +6,6 @@ Django Rest Framework Mongoengine
 [![PyPI version](https://badge.fury.io/py/django-rest-framework-mongoengine.svg)](https://badge.fury.io/py/django-rest-framework-mongoengine)
 [![Join the chat at https://gitter.im/BurkovBA/django-rest-framework-mongoengine](https://badges.gitter.im/BurkovBA/django-rest-framework-mongoengine.svg)](https://gitter.im/BurkovBA/django-rest-framework-mongoengine?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-
 The package provides [mongoengine](http://mongoengine.org/) support for [django-rest-framework](https://github.com/tomchristie/django-rest-framework).
 
 ## Documentation
@@ -17,7 +16,7 @@ The features and differences of this package are described in [API documentation
 
 ## Requirements
 
-* Django == 5.2.12
+* Django == 5.2.13
 * djangorestframework == 3.16.1
 * mongoengine == 0.29.1
 * blinker == 1.* (for mongoengine referencefields to work)
@@ -34,13 +33,13 @@ The features and differences of this package are described in [API documentation
 * copy subdir `unpacked_path/rest_framework_mongoengine` into your django project or inside python path
 * or, install using `pip unpacked_path`
 
-### do not use git clone!
+### do not use git clone
 
 It may contain non-working code. Before using it, run tests to ensure the code is working.
 
 ## Usage
 
-### Include the packages in Django settings.
+### Include the packages in Django settings
 
 ```Python
 INSTALLED_APPS = (
