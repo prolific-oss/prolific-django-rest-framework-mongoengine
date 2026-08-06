@@ -1,0 +1,102 @@
+name: Tests
+
+# This library has no deployment of its own. It is consumed by the prolific
+# monolith, which pins it by git tag. The point of this workflow is to verify
+# that the library still works against the versions the monolith runs, so a
+# monolith upgrade cannot silently break the ~150 modules that import it.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    # Weekly, so drift against upstream Django/DRF surfaces without waiting for
+    # someone to open a pull request.
+    - cron: "0 6 * * 1"
+
+jobs:
+  test:
+    name: Pinned versions (matches monolith)
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    services:
+      mongodb:
+        # Matches the monolith's docker-compose.yml.
+        image: mongo:7.0.17
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements/requirements-testing.txt
+
+      - name: Show resolved versions
+        run: pip list
+
+      - name: Run tests
+        run: pytest tests/ -q
+
+  latest:
+    name: Latest Django and DRF (informational)
+    runs-on: ubuntu-latest
+    # Non-blocking. This job exists to catch the case that bit us before: the
+    # monolith moved DRF from 3.16.1 to 3.17.1 while this repo's pins still
+    # claimed 3.16.1, and nothing flagged it. A red result here is an early
+    # warning to check compatibility, not a reason to block a pull request.
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    services:
+      mongodb:
+        image: mongo:7.0.17
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install latest Django and DRF
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade django djangorestframework mongoengine blinker
+          pip install -r requirements/requirements-testing.txt
+
+      - name: Show resolved versions
+        run: pip list
+
+      - name: Run tests
+        run: pytest tests/ -q
