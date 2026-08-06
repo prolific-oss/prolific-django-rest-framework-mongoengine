@@ -9,6 +9,7 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_dispatch:
   schedule:
     # Weekly, so drift against upstream Django/DRF surfaces without waiting for
     # someone to open a pull request.
@@ -59,10 +60,16 @@ jobs:
   latest:
     name: Latest Django and DRF (informational)
     runs-on: ubuntu-latest
-    # Non-blocking. This job exists to catch the case that bit us before: the
-    # monolith moved DRF from 3.16.1 to 3.17.1 while this repo's pins still
-    # claimed 3.16.1, and nothing flagged it. A red result here is an early
-    # warning to check compatibility, not a reason to block a pull request.
+    # Drift detection, not a pull request gate. This catches the case that was
+    # missed before: the monolith moved DRF from 3.16.1 to 3.17.1 while this
+    # repo's pins still claimed 3.16.1, and nothing flagged it.
+    #
+    # Deliberately not run per pull request. Upstream versions do not change
+    # because of a pull request, so a red result here would say nothing about the
+    # change under review, and a check that is red for unrelated reasons stops
+    # being read. The weekly schedule is what does the work; use the manual
+    # trigger to check compatibility before bumping a pin.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     continue-on-error: true
 
     strategy:
