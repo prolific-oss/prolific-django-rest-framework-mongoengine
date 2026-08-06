@@ -16,10 +16,17 @@ The features and differences of this package are described in [API documentation
 
 ## Requirements
 
-* Django == 5.2.13
-* djangorestframework == 3.16.1
+* Django >= 5.2.17, < 5.3
+* djangorestframework == 3.17.1
 * mongoengine == 0.29.1
-* blinker == 1.* (for mongoengine referencefields to work)
+* blinker == 1.9.0 (for mongoengine referencefields to work)
+
+These mirror the versions the Prolific monolith runs, and CI verifies the test
+suite against them on every push and pull request. When the monolith upgrades
+any of them, update `requirements.txt` here and let CI confirm the library still
+works. Note that this package declares no `install_requires`, so it does not
+install Django, DRF or mongoengine itself; it expects the host project to
+provide them.
 
 ## Installation
 

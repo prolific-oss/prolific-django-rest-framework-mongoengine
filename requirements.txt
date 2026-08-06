@@ -1,4 +1,26 @@
-Django==5.2.17
-djangorestframework==3.16.1
-mongoengine
+# Test fixture, not a dependency list.
+#
+# setup.py declares no install_requires, so installing this package pulls in
+# nothing. The prolific monolith installs Django, DRF and mongoengine from its
+# own pyproject.toml. Nothing reads this file at install time.
+#
+# What this file is for: mirroring the versions the monolith actually runs, so
+# CI can verify the library against them. See .github/workflows/tests.yaml.
+# Keep in sync with prolific/pyproject.toml when the monolith upgrades.
+
+# Loosely coupled. The library imports only django.http and django.utils.*, so
+# any patch in the 5.2 LTS line works. Range rather than an exact pin so
+# security patches land without a manual bump; the floor stays on a patched
+# release. Monolith is on 5.2.16.
+Django>=5.2.17,<5.3
+
+# Tightly coupled. The library subclasses DRF serializers, generics and fields,
+# so this is the version that can actually break it. Pinned exactly to the
+# monolith.
+djangorestframework==3.17.1
+
+# The monolith uses the prolific-mongoengine fork at tag v0.29.1.
+mongoengine==0.29.1
+
+# Required for mongoengine reference fields to work.
 blinker==1.9.0
