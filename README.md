@@ -17,7 +17,7 @@ The features and differences of this package are described in [API documentation
 ## Requirements
 
 * Django == 5.2.13
-* djangorestframework == 3.16.1
+* djangorestframework == 3.17.2
 * mongoengine == 0.29.1
 * blinker == 1.* (for mongoengine referencefields to work)
 
